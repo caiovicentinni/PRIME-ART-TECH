@@ -7,6 +7,8 @@ import { getWhatsAppUrl } from '../utils/whatsapp';
 
 import classicPoster from '../assets/classic-poster.jpg';
 import barPoster from '../assets/bar-poster.jpg';
+import classicVideo from '../assets/classic.mp4';
+import barVideo from '../assets/bar.mp4';
 
 export default function MachineShowcase() {
   const { t, i18n } = useTranslation();
@@ -28,10 +30,14 @@ export default function MachineShowcase() {
           {/* Classic Model */}
           <div className="grid md:grid-cols-2 gap-12 items-center bg-white rounded-[2rem] p-8 md:p-12 shadow-xl border border-gray-100">
             <div className="relative h-80 md:h-[400px] rounded-2xl overflow-hidden shadow-inner group">
-              <img
+              <video
                 className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
-                src={classicPoster}
-                alt="Modelo Classic"
+                src={classicVideo}
+                poster={classicPoster}
+                autoPlay
+                loop
+                muted
+                playsInline
               />
               <div className="absolute inset-0 bg-gradient-to-tr from-accent/50 to-transparent mix-blend-multiply pointer-events-none"></div>
             </div>
@@ -58,10 +64,14 @@ export default function MachineShowcase() {
           {/* Bar Model */}
           <div className="grid md:grid-cols-2 gap-12 items-center bg-white rounded-[2rem] p-8 md:p-12 shadow-xl border border-gray-100 flex-col-reverse md:flex-row-reverse">
             <div className="relative h-80 md:h-[400px] rounded-2xl overflow-hidden shadow-inner bg-accent group">
-              <img
+              <video
                 className="absolute inset-0 w-full h-full object-cover opacity-80 transition-transform duration-700 group-hover:scale-105"
-                src={barPoster}
-                alt="Modelo Bar"
+                src={barVideo}
+                poster={barPoster}
+                autoPlay
+                loop
+                muted
+                playsInline
               />
               <div className="absolute inset-0 bg-gradient-to-bl from-accent/80 to-transparent mix-blend-multiply pointer-events-none"></div>
               <p className="absolute bottom-6 left-6 text-white/50 text-sm italic font-light tracking-wide">
