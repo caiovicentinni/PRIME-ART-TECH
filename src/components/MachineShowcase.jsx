@@ -7,6 +7,8 @@ import { getWhatsAppUrl } from '../utils/whatsapp';
 
 import classicVideoSrc from '../assets/classic.mp4';
 import barVideoSrc from '../assets/bar.mp4';
+import classicPoster from '../assets/classic-poster.jpg';
+import barPoster from '../assets/bar-poster.jpg';
 
 export default function MachineShowcase() {
   const { t, i18n } = useTranslation();
@@ -15,6 +17,16 @@ export default function MachineShowcase() {
   const barVideoRef = useRef(null);
 
   useEffect(() => {
+    // Forçar mudo nativo para driblar travamentos do Safari iOS
+    if (classicVideoRef.current) {
+        classicVideoRef.current.defaultMuted = true;
+        classicVideoRef.current.muted = true;
+    }
+    if (barVideoRef.current) {
+        barVideoRef.current.defaultMuted = true;
+        barVideoRef.current.muted = true;
+    }
+
     const observer = new IntersectionObserver((entries) => {
       entries.forEach(entry => {
         if (entry.isIntersecting) {
@@ -51,7 +63,8 @@ export default function MachineShowcase() {
               <video 
                 ref={classicVideoRef}
                 className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
-                autoPlay muted loop playsInline preload="auto"
+                autoPlay={true} muted={true} loop={true} playsInline={true} preload="auto"
+                poster={classicPoster}
                 src={classicVideoSrc}
               />
               <div className="absolute inset-0 bg-gradient-to-tr from-accent/50 to-transparent mix-blend-multiply pointer-events-none"></div>
@@ -82,7 +95,8 @@ export default function MachineShowcase() {
               <video 
                 ref={barVideoRef}
                 className="absolute inset-0 w-full h-full object-cover opacity-80 transition-transform duration-700 group-hover:scale-105"
-                autoPlay muted loop playsInline preload="auto"
+                autoPlay={true} muted={true} loop={true} playsInline={true} preload="auto"
+                poster={barPoster}
                 src={barVideoSrc}
               />
               <div className="absolute inset-0 bg-gradient-to-bl from-accent/80 to-transparent mix-blend-multiply pointer-events-none"></div>
