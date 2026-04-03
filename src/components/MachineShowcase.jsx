@@ -5,6 +5,9 @@ import { motion } from 'framer-motion';
 import { useTranslation } from 'react-i18next';
 import { getWhatsAppUrl } from '../utils/whatsapp';
 
+import classicVideoSrc from '../assets/classic.mp4';
+import barVideoSrc from '../assets/bar.mp4';
+
 export default function MachineShowcase() {
   const { t, i18n } = useTranslation();
   const whatsappLink = getWhatsAppUrl(i18n.language);
@@ -49,7 +52,7 @@ export default function MachineShowcase() {
                 ref={classicVideoRef}
                 className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
                 autoPlay muted loop playsInline preload="auto"
-                src={`${import.meta.env.BASE_URL}LAF_Classic_Intro_Video_compressed.mp4`}
+                src={classicVideoSrc}
               />
               <div className="absolute inset-0 bg-gradient-to-tr from-accent/50 to-transparent mix-blend-multiply pointer-events-none"></div>
             </div>
@@ -80,7 +83,7 @@ export default function MachineShowcase() {
                 ref={barVideoRef}
                 className="absolute inset-0 w-full h-full object-cover opacity-80 transition-transform duration-700 group-hover:scale-105"
                 autoPlay muted loop playsInline preload="auto"
-                src={`${import.meta.env.BASE_URL}LAF_Bar_Pro_compressed.mp4`}
+                src={barVideoSrc}
               />
               <div className="absolute inset-0 bg-gradient-to-bl from-accent/80 to-transparent mix-blend-multiply pointer-events-none"></div>
               <p className="absolute bottom-6 left-6 text-white/50 text-sm italic font-light tracking-wide">
