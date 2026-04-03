@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useRef, useEffect } from 'react';
 import { Settings, Maximize, Zap, EyeOff, LayoutTemplate, Layers } from 'lucide-react';
 import { Button } from './ui/Button';
 import { motion } from 'framer-motion';
@@ -8,6 +8,26 @@ import { getWhatsAppUrl } from '../utils/whatsapp';
 export default function MachineShowcase() {
   const { t, i18n } = useTranslation();
   const whatsappLink = getWhatsAppUrl(i18n.language);
+  const classicVideoRef = useRef(null);
+  const barVideoRef = useRef(null);
+
+  useEffect(() => {
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.play().catch(e => console.error("Autoplay failed:", e));
+        }
+      });
+    }, { threshold: 0.1 });
+
+    if (classicVideoRef.current) observer.observe(classicVideoRef.current);
+    if (barVideoRef.current) observer.observe(barVideoRef.current);
+
+    return () => {
+      if (classicVideoRef.current) observer.unobserve(classicVideoRef.current);
+      if (barVideoRef.current) observer.unobserve(barVideoRef.current);
+    };
+  }, []);
 
   return (
     <section className="py-24 bg-surface text-accent" id="modelos">
@@ -26,8 +46,9 @@ export default function MachineShowcase() {
           <div className="grid md:grid-cols-2 gap-12 items-center bg-white rounded-[2rem] p-8 md:p-12 shadow-xl border border-gray-100">
             <div className="relative h-80 md:h-[400px] rounded-2xl overflow-hidden shadow-inner group">
               <video 
+                ref={classicVideoRef}
                 className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
-                autoPlay muted loop playsInline
+                autoPlay muted loop playsInline preload="auto"
                 src={`${import.meta.env.BASE_URL}LAF_Classic_Intro_Video_compressed.mp4`}
               />
               <div className="absolute inset-0 bg-gradient-to-tr from-accent/50 to-transparent mix-blend-multiply pointer-events-none"></div>
@@ -56,8 +77,9 @@ export default function MachineShowcase() {
           <div className="grid md:grid-cols-2 gap-12 items-center bg-white rounded-[2rem] p-8 md:p-12 shadow-xl border border-gray-100 flex-col-reverse md:flex-row-reverse">
             <div className="relative h-80 md:h-[400px] rounded-2xl overflow-hidden shadow-inner bg-accent group">
               <video 
+                ref={barVideoRef}
                 className="absolute inset-0 w-full h-full object-cover opacity-80 transition-transform duration-700 group-hover:scale-105"
-                autoPlay muted loop playsInline
+                autoPlay muted loop playsInline preload="auto"
                 src={`${import.meta.env.BASE_URL}LAF_Bar_Pro_compressed.mp4`}
               />
               <div className="absolute inset-0 bg-gradient-to-bl from-accent/80 to-transparent mix-blend-multiply pointer-events-none"></div>
