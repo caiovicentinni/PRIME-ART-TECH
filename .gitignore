@@ -1,0 +1,14 @@
+node_modules
+dist-ssr
+*.local
+.env
+.env.*
+.env.*.local
+.DS_Store
+*.mov
+LAF Classic_Intro Video.mp4
+LAF_Bar_Pro_raw.mp4
+public/videoprincipal.mp4
+GEMINI.MD
+referencia_latterfactor.md
+referencia_latterfactor_video.md
