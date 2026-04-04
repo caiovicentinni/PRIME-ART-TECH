@@ -1,18 +1,48 @@
-import React from 'react';
+import React, { useRef, useEffect } from 'react';
 import { Settings, Maximize, Zap, EyeOff, LayoutTemplate, Layers } from 'lucide-react';
 import { Button } from './ui/Button';
 import { motion } from 'framer-motion';
 import { useTranslation } from 'react-i18next';
 import { getWhatsAppUrl } from '../utils/whatsapp';
 
+import classicVideoSrc from '../assets/classic.mp4';
+import barVideoSrc from '../assets/bar.mp4';
 import classicPoster from '../assets/classic-poster.jpg';
 import barPoster from '../assets/bar-poster.jpg';
-import classicVideo from '../assets/classic.mp4';
-import barVideo from '../assets/bar.mp4';
 
 export default function MachineShowcase() {
   const { t, i18n } = useTranslation();
   const whatsappLink = getWhatsAppUrl(i18n.language);
+  const classicVideoRef = useRef(null);
+  const barVideoRef = useRef(null);
+
+  useEffect(() => {
+    // Forçar mudo nativo para driblar travamentos do Safari iOS
+    if (classicVideoRef.current) {
+        classicVideoRef.current.defaultMuted = true;
+        classicVideoRef.current.muted = true;
+    }
+    if (barVideoRef.current) {
+        barVideoRef.current.defaultMuted = true;
+        barVideoRef.current.muted = true;
+    }
+
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.play().catch(e => console.error("Autoplay failed:", e));
+        }
+      });
+    }, { threshold: 0.1 });
+
+    if (classicVideoRef.current) observer.observe(classicVideoRef.current);
+    if (barVideoRef.current) observer.observe(barVideoRef.current);
+
+    return () => {
+      if (classicVideoRef.current) observer.unobserve(classicVideoRef.current);
+      if (barVideoRef.current) observer.unobserve(barVideoRef.current);
+    };
+  }, []);
 
   return (
     <section className="py-24 bg-surface text-accent" id="modelos">
@@ -30,14 +60,12 @@ export default function MachineShowcase() {
           {/* Classic Model */}
           <div className="grid md:grid-cols-2 gap-12 items-center bg-white rounded-[2rem] p-8 md:p-12 shadow-xl border border-gray-100">
             <div className="relative h-80 md:h-[400px] rounded-2xl overflow-hidden shadow-inner group">
-              <video
+              <video 
+                ref={classicVideoRef}
                 className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
-                src={classicVideo}
+                autoPlay={true} muted={true} loop={true} playsInline={true} preload="auto"
                 poster={classicPoster}
-                autoPlay
-                loop
-                muted
-                playsInline
+                src={classicVideoSrc}
               />
               <div className="absolute inset-0 bg-gradient-to-tr from-accent/50 to-transparent mix-blend-multiply pointer-events-none"></div>
             </div>
@@ -64,14 +92,12 @@ export default function MachineShowcase() {
           {/* Bar Model */}
           <div className="grid md:grid-cols-2 gap-12 items-center bg-white rounded-[2rem] p-8 md:p-12 shadow-xl border border-gray-100 flex-col-reverse md:flex-row-reverse">
             <div className="relative h-80 md:h-[400px] rounded-2xl overflow-hidden shadow-inner bg-accent group">
-              <video
+              <video 
+                ref={barVideoRef}
                 className="absolute inset-0 w-full h-full object-cover opacity-80 transition-transform duration-700 group-hover:scale-105"
-                src={barVideo}
+                autoPlay={true} muted={true} loop={true} playsInline={true} preload="auto"
                 poster={barPoster}
-                autoPlay
-                loop
-                muted
-                playsInline
+                src={barVideoSrc}
               />
               <div className="absolute inset-0 bg-gradient-to-bl from-accent/80 to-transparent mix-blend-multiply pointer-events-none"></div>
               <p className="absolute bottom-6 left-6 text-white/50 text-sm italic font-light tracking-wide">
